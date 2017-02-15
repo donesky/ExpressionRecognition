@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="English">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>knn &#8212; Reconnaissance d&#39;émotion 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Reconnaissance d&#39;émotion 2.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for knn</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;kNN: k Nearest Neighbors</span>
+
+<span class="sd">Input:</span>
+
+<span class="sd">#. newInput: vector to compare to existing dataset (1xN)</span>
+
+<span class="sd">#. dataSet:  size m data set of known vectors (NxM)</span>
+
+<span class="sd">#. labels: 	data set labels (1xM vector)</span>
+
+<span class="sd">#. k: 		number of neighbors to use for comparison</span>
+
+<span class="sd">Output:</span>
+
+<span class="sd">#. the most popular class label</span>
+
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<span class="n">Emotion_dict</span><span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;joie&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;degout&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s1">&#39;tristesse&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s1">&#39;colere&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s1">&#39;surprise&#39;</span><span class="p">}</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Dictionary of emotions: In this project we use 5 base emotions.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">Matrix_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;joie&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;degout&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;tristesse&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;colere&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;surprise&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Dictionary of result matrix: This dictionary is used for recording the results of each prediction.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="createDataSet"><a class="viewcode-back" href="../Documentation of Code.html#knn.createDataSet">[docs]</a><span class="k">def</span> <span class="nf">createDataSet</span><span class="p">(</span><span class="n">dataList</span><span class="p">,</span> <span class="n">lableList</span><span class="p">,</span><span class="n">lenTest</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Prepare data sets for predict</span>
+
+<span class="sd">    :param dataList: The coordinates of all expressions in latent space.</span>
+<span class="sd">    :param lableList: The classification labels of all expressions.</span>
+<span class="sd">    :param lenTest: the number of the test data</span>
+<span class="sd">    :return:</span>
+<span class="sd">        groupData: Array list of the training data&#39;s coordinates</span>
+
+<span class="sd">        groupTest: Array list of the testing data&#39;s coordinates</span>
+
+<span class="sd">        labels: list of classification labels</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># create a matrix: each row as a sample</span>
+    <span class="n">groupData</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">dataList</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">dataList</span><span class="p">)</span><span class="o">-</span><span class="n">lenTest</span><span class="p">])</span>
+    <span class="n">groupTest</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">dataList</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dataList</span><span class="p">)</span><span class="o">-</span><span class="n">lenTest</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">dataList</span><span class="p">)])</span>
+    <span class="n">lableList</span><span class="o">=</span><span class="n">lableList</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">dataList</span><span class="p">)</span><span class="o">-</span><span class="n">lenTest</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">Emotion_dict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Emotion_dict</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lableList</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">groupData</span><span class="p">,</span> <span class="n">groupTest</span><span class="p">,</span> <span class="n">labels</span></div>
+<span class="c1">#</span>
+<div class="viewcode-block" id="predictMatrix"><a class="viewcode-back" href="../Documentation of Code.html#knn.predictMatrix">[docs]</a><span class="k">def</span> <span class="nf">predictMatrix</span><span class="p">(</span><span class="n">dataList</span><span class="p">,</span> <span class="n">lableList</span><span class="p">,</span> <span class="n">lenTest</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span><span class="n">labelsAsListTest</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Classify emotions using kNN then generate the predict matrix.</span>
+
+<span class="sd">    :param dataList: The coordinates of all expressions in latent space.</span>
+<span class="sd">    :param lableList: The classification labels of all expressions.</span>
+<span class="sd">    :param lenTest: the number of the test data</span>
+<span class="sd">    :param K: Number of neighbors to use for comparison</span>
+<span class="sd">    :param labelsAsListTest: the real classification labels of testing datas.</span>
+<span class="sd">    :return: Print the Matrix of results.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">groupData</span><span class="p">,</span> <span class="n">groupTest</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">createDataSet</span><span class="p">(</span><span class="n">dataList</span><span class="p">,</span> <span class="n">lableList</span><span class="p">,</span> <span class="n">lenTest</span><span class="p">)</span>
+    <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">testPoint</span> <span class="ow">in</span> <span class="n">groupTest</span><span class="p">:</span>
+        <span class="n">outputLabel</span><span class="p">,</span><span class="n">classCount</span> <span class="o">=</span> <span class="n">kNNClassify</span><span class="p">(</span><span class="n">testPoint</span><span class="p">,</span> <span class="n">groupData</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cC</span> <span class="ow">in</span> <span class="n">classCount</span><span class="p">:</span>
+            <span class="n">classCount</span><span class="p">[</span><span class="n">cC</span><span class="p">]</span><span class="o">=</span><span class="nb">str</span><span class="p">((</span><span class="n">classCount</span><span class="p">[</span><span class="n">cC</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">K</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;%&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;Your input is:&quot;</span><span class="p">,</span> <span class="n">Emotion_dict</span><span class="p">[</span><span class="n">labelsAsListTest</span><span class="p">[</span><span class="n">index</span><span class="p">]],</span> <span class="s2">&quot;and classified to class: &quot;</span><span class="p">,</span> <span class="n">outputLabel</span>
+        <span class="nb">print</span> <span class="s2">&quot;Matrix of results is:&quot;</span><span class="p">,</span><span class="n">classCount</span><span class="p">,</span><span class="n">index</span>
+        <span class="nb">print</span> <span class="s2">&quot;-------------------------------------------------------------------&quot;</span>
+        <span class="k">if</span> <span class="n">Emotion_dict</span><span class="p">[</span><span class="n">labelsAsListTest</span><span class="p">[</span><span class="n">index</span><span class="p">]]</span> <span class="o">==</span> <span class="n">outputLabel</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[94m&#39;</span><span class="o">+</span><span class="s2">&quot; Correct!&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+            <span class="n">Matrix_dict</span><span class="p">[</span><span class="n">outputLabel</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[91m&#39;</span><span class="o">+</span><span class="s2">&quot;Wrong!&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span> <span class="s2">&quot;Results statistics:&quot;</span>
+    <span class="nb">print</span> <span class="s2">&quot;------------------&quot;</span>
+    <span class="nb">print</span> <span class="s2">&quot;|Emotion|   Accuracy|&quot;</span>
+    <span class="n">countAll</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">lenTest</span><span class="o">/</span><span class="n">Matrix_dict</span><span class="o">.</span><span class="n">__len__</span><span class="p">()</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">Matrix_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;  |&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">count</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;%&quot;</span>
+        <span class="n">countAll</span> <span class="o">+=</span><span class="n">v</span>
+    <span class="nb">print</span> <span class="s2">&quot;------------------&quot;</span>
+    <span class="nb">print</span>  <span class="s2">&quot;Total  |&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">countAll</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">lenTest</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span></div>
+
+
+<span class="c1"># classify using kNN</span>
+<div class="viewcode-block" id="kNNClassify"><a class="viewcode-back" href="../Documentation of Code.html#knn.kNNClassify">[docs]</a><span class="k">def</span> <span class="nf">kNNClassify</span><span class="p">(</span><span class="n">newInput</span><span class="p">,</span> <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; kNN method</span>
+
+<span class="sd">    :param newInput: Data being classified</span>
+<span class="sd">    :param dataSet: Training data</span>
+<span class="sd">    :param labels: The classification labels</span>
+<span class="sd">    :param k: nNumber of neighbors to use for comparison</span>
+<span class="sd">    :return:</span>
+<span class="sd">        maxIndex: The closest expression index.</span>
+
+<span class="sd">        classCount: The matrix of the result.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">numSamples</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># shape[0] stands for the num of row</span>
+
+    <span class="c1">## step 1: calculate Euclidean distance</span>
+    <span class="c1"># tile(A, reps): Construct an array by repeating A reps times</span>
+    <span class="c1"># the following copy numSamples rows for dataSet</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">newInput</span><span class="p">,</span> <span class="p">(</span><span class="n">numSamples</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="n">dataSet</span>  <span class="c1"># Subtract element-wise</span>
+    <span class="n">squaredDiff</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># squared for the subtract</span>
+    <span class="n">squaredDist</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">squaredDiff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># sum is performed by row</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">squaredDist</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="c1">## step 2: sort the distance</span>
+    <span class="c1"># argsort() returns the indices that would sort an array in a ascending order</span>
+    <span class="n">sortedDistIndices</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+
+    <span class="n">classCount</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;joie&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;degout&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;tristesse&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;colere&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;surprise&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>  <span class="c1"># define a dictionary (can be append element)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="c1">## step 3: choose the min k distance</span>
+        <span class="n">voteLabel</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">sortedDistIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+        <span class="c1">## step 4: count the times labels occur</span>
+        <span class="c1"># when the key voteLabel is not in dictionary classCount, get()</span>
+        <span class="c1"># will return 0</span>
+        <span class="n">classCount</span><span class="p">[</span><span class="n">voteLabel</span><span class="p">]</span> <span class="o">=</span> <span class="n">classCount</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">voteLabel</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1">## step 5: the max voted class will return</span>
+    <span class="n">maxCount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">classCount</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">maxCount</span><span class="p">:</span>
+            <span class="n">maxCount</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">maxIndex</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">return</span> <span class="n">maxIndex</span><span class="p">,</span><span class="n">classCount</span></div>
+
+
+<span class="c1">#Run the extraction work Independently.</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">createDataSet</span><span class="p">()</span>
+
+    <span class="n">testX</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">outputLabel</span><span class="p">,</span><span class="n">classCount</span> <span class="o">=</span> <span class="n">kNNClassify</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s2">&quot;Your input is:&quot;</span><span class="p">,</span> <span class="n">testX</span><span class="p">,</span> <span class="s2">&quot;and classified to class: &quot;</span><span class="p">,</span> <span class="n">outputLabel</span>
+
+    <span class="n">testX</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+    <span class="n">outputLabel</span><span class="p">,</span><span class="n">classCount</span> <span class="o">=</span> <span class="n">kNNClassify</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s2">&quot;Your input is:&quot;</span><span class="p">,</span> <span class="n">testX</span><span class="p">,</span> <span class="s2">&quot;and classified to class: &quot;</span><span class="p">,</span> <span class="n">outputLabel</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Qiuye DONG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

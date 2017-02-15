@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="English">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>utilText &#8212; Reconnaissance d&#39;émotion 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Reconnaissance d&#39;émotion 2.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for utilText</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module is used to implement IO operations as a tool.</span>
+
+<span class="sd">It is called after the face detection,the purpose is to save the detected feature values in a document for later use.</span>
+<span class="sd">The operations for reading the detected feature values from the text are also implemented in this class.</span>
+
+<span class="sd">.. note::</span>
+
+<span class="sd">   Feature values and classification labels are stored in a different path.</span>
+<span class="sd">    * Feature values are stored in ``FeaturesData/dataValues.txt``.</span>
+<span class="sd">    * classification labels are stored in ``FeaturesData/labels.txt``.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">feature_values_path</span> <span class="o">=</span> <span class="s1">&#39;FeaturesData/dataValues.txt&#39;</span>
+<span class="sd">&quot;&quot;&quot;str: The path of the text which stored feature values.</span>
+<span class="sd">Can be modified according to the requirements</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">label_path</span> <span class="o">=</span> <span class="s1">&#39;FeaturesData/labels.txt&#39;</span>
+<span class="sd">&quot;&quot;&quot;str: The path of the text which stored labels of classification.</span>
+<span class="sd">Can be modified according to the requirements</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SaveFeatures"><a class="viewcode-back" href="../Documentation of Code.html#utilText.SaveFeatures">[docs]</a><span class="k">def</span> <span class="nf">SaveFeatures</span><span class="p">(</span><span class="n">dataAsList</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This function store detected feature values into text file .</span>
+
+<span class="sd">    :param dataAsList: ({list}&lt;type &#39;list&#39;&gt;) All the detected feature values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fileDataValues</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">feature_values_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">datas</span> <span class="ow">in</span> <span class="n">dataAsList</span><span class="p">:</span>
+        <span class="n">fileDataValues</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">))</span>
+        <span class="n">fileDataValues</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">fileDataValues</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReadFeatures"><a class="viewcode-back" href="../Documentation of Code.html#utilText.ReadFeatures">[docs]</a><span class="k">def</span> <span class="nf">ReadFeatures</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; This function read detected feature values from the text file .</span>
+
+<span class="sd">    :return: A map(int, list) contains all the detected feature values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fileDataValues</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">feature_values_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">yourResult</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileDataValues</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="n">fileDataValues</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">resultline</span><span class="p">)</span> <span class="k">for</span> <span class="n">resultline</span> <span class="ow">in</span> <span class="n">yourResult</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SaveLabels"><a class="viewcode-back" href="../Documentation of Code.html#utilText.SaveLabels">[docs]</a><span class="k">def</span> <span class="nf">SaveLabels</span><span class="p">(</span><span class="n">dataLabelsAsList</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This function store classification labels into text file .</span>
+
+<span class="sd">    :param dataLabelsAsList: ({list}&lt;type &#39;int&#39;&gt;) All the classification labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fileDataValues</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">label_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">datas</span> <span class="ow">in</span> <span class="n">dataLabelsAsList</span><span class="p">:</span>
+        <span class="n">fileDataValues</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">datas</span><span class="p">)</span>
+    <span class="n">fileDataValues</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReadLabels"><a class="viewcode-back" href="../Documentation of Code.html#utilText.ReadLabels">[docs]</a><span class="k">def</span> <span class="nf">ReadLabels</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; This function read classification labels from the text file .</span>
+
+<span class="sd">    :return: A list(int) contains all the classification labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fileDataValues</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">label_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">yourResult</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileDataValues</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="n">fileDataValues</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">resultline</span><span class="p">)</span> <span class="k">for</span> <span class="n">resultline</span> <span class="ow">in</span> <span class="n">yourResult</span><span class="p">]</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Qiuye DONG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="English">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>webcam &#8212; Reconnaissance d&#39;émotion 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Reconnaissance d&#39;émotion 2.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for webcam</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module loads emotion recognition model from a file,</span>
+<span class="sd">shows a webcam image, recognizes face and it&#39;s emotion and draw emotion on the image.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">cv2</span> <span class="k">import</span> <span class="n">WINDOW_NORMAL</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+
+
+
+<div class="viewcode-block" id="show_webcam_and_run"><a class="viewcode-back" href="../Documentation of Code.html#webcam.show_webcam_and_run">[docs]</a><span class="k">def</span> <span class="nf">show_webcam_and_run</span><span class="p">(</span> <span class="n">window_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_name</span><span class="o">=</span><span class="s1">&#39;webcam&#39;</span><span class="p">,</span> <span class="n">update_time</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.</span>
+<span class="sd">    :param window_size: Size of webcam image window.</span>
+<span class="sd">    :param window_name: Name of webcam image window.</span>
+<span class="sd">    :param update_time: Image update time interval.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="n">window_name</span><span class="p">,</span> <span class="n">WINDOW_NORMAL</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">window_size</span><span class="p">:</span>
+        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">window_size</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">resizeWindow</span><span class="p">(</span><span class="n">window_name</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+    <span class="n">vc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">vc</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+        <span class="n">read_value</span><span class="p">,</span> <span class="n">webcam_image</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;webcam not found&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">while</span> <span class="n">read_value</span><span class="p">:</span>
+
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">window_name</span><span class="p">,</span> <span class="n">webcam_image</span><span class="p">)</span>
+        <span class="n">read_value</span><span class="p">,</span> <span class="n">webcam_image</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="n">update_time</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span>  <span class="c1"># exit on ESC</span>
+            <span class="k">break</span>
+
+    <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="n">window_name</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1">#emotions = [&#39;neutral&#39;, &#39;anger&#39;, &#39;disgust&#39;, &#39;happy&#39;, &#39;sadness&#39;, &#39;surprise&#39;]</span>
+    <span class="c1">#load_emoticons</span>
+    <span class="c1"># load model</span>
+
+    <span class="c1"># use learnt model</span>
+    <span class="n">window_name</span> <span class="o">=</span> <span class="s1">&#39;WEBCAM (press ESC to exit)&#39;</span>
+    <span class="n">show_webcam_and_run</span><span class="p">(</span> <span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span> <span class="mi">1200</span><span class="p">),</span> <span class="n">window_name</span><span class="o">=</span><span class="n">window_name</span><span class="p">,</span> <span class="n">update_time</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Qiuye DONG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

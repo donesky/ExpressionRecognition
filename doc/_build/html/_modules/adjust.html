@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="English">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>adjust &#8212; Reconnaissance d&#39;émotion 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Reconnaissance d&#39;émotion 2.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for adjust</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&#39;&#39;&#39;This module is responsible for adjusting the face in the image by the location of 2 eyes.</span>
+<span class="sd">Copyright (c) Philipp Wagner. All rights reserved.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">Image</span>
+
+
+<div class="viewcode-block" id="Distance"><a class="viewcode-back" href="../Documentation of Code.html#adjust.Distance">[docs]</a><span class="k">def</span> <span class="nf">Distance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function calculate the distance between 2 points.</span>
+<span class="sd">    :param p1: point 1</span>
+<span class="sd">    :param p2: point 2</span>
+<span class="sd">    :return: distance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ScaleRotateTranslate"><a class="viewcode-back" href="../Documentation of Code.html#adjust.ScaleRotateTranslate">[docs]</a><span class="k">def</span> <span class="nf">ScaleRotateTranslate</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">new_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">BICUBIC</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function adjusts the angle of the face.</span>
+<span class="sd">    :param image: Image to be processed</span>
+<span class="sd">    :param angle: The inclination angle of the face</span>
+<span class="sd">    :param center: The center of the angle transformation</span>
+<span class="sd">    :param new_center: New center</span>
+<span class="sd">    :param scale: Scale factor</span>
+<span class="sd">    :param resample: Image.BICUBIC</span>
+<span class="sd">    :return: Transformed image</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">image</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="n">resample</span><span class="p">)</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">center</span>
+    <span class="n">sx</span> <span class="o">=</span> <span class="n">sy</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="n">new_center</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span> <span class="o">=</span> <span class="n">new_center</span>
+    <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">cosine</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+    <span class="n">sine</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">cosine</span> <span class="o">/</span> <span class="n">sx</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">sine</span> <span class="o">/</span> <span class="n">sx</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="o">-</span><span class="n">sine</span> <span class="o">/</span> <span class="n">sy</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">cosine</span> <span class="o">/</span> <span class="n">sy</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">d</span> <span class="o">-</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">e</span>
+    <span class="k">return</span> <span class="n">image</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">AFFINE</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">resample</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CropFace"><a class="viewcode-back" href="../Documentation of Code.html#adjust.CropFace">[docs]</a><span class="k">def</span> <span class="nf">CropFace</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">eye_left</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">eye_right</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">offset_pct</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">dest_sz</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">)):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    :param image: Original image</span>
+<span class="sd">    :param eye_left: Position of the left eye</span>
+<span class="sd">    :param eye_right: Position of the right eye</span>
+<span class="sd">    :param offset_pct: used for calculating offsets in original image</span>
+<span class="sd">    :param dest_sz: size of cropped image</span>
+<span class="sd">    :return: Cropped image</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># calculate offsets in original image</span>
+    <span class="n">offset_h</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">offset_pct</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">dest_sz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">offset_v</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">offset_pct</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">dest_sz</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># get the direction</span>
+    <span class="n">eye_direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye_right</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">eye_left</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">eye_right</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">eye_left</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># calc rotation angle in radians</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">atan</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">eye_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">eye_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="c1"># distance between them</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">Distance</span><span class="p">(</span><span class="n">eye_left</span><span class="p">,</span> <span class="n">eye_right</span><span class="p">)</span>
+    <span class="c1"># calculate the reference eye-width</span>
+    <span class="n">reference</span> <span class="o">=</span> <span class="n">dest_sz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">offset_h</span>
+    <span class="c1"># scale factor</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="c1"># rotate original around the left eye</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">ScaleRotateTranslate</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">eye_left</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
+    <span class="c1"># crop the rotated image</span>
+    <span class="n">crop_xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">offset_h</span><span class="p">,</span> <span class="n">eye_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">offset_v</span><span class="p">)</span>
+    <span class="n">crop_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">dest_sz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">dest_sz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span>
+        <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">crop_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">crop_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">crop_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">crop_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">crop_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">crop_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="c1"># resize it</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">dest_sz</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">ANTIALIAS</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">image</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Qiuye DONG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

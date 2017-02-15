@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="English">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documentation for the Code &#8212; Reconnaissance d&#39;émotion 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Reconnaissance d&#39;émotion 2.0 documentation" href="index.html" />
+    <link rel="next" title="Update Log" href="UpdateLog.html" />
+    <link rel="prev" title="Introduction" href="Code.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="UpdateLog.html" title="Update Log"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Code.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation-for-the-code">
+<h1>Documentation for the Code<a class="headerlink" href="#documentation-for-the-code" title="Permalink to this headline">¶</a></h1>
+<p>This section is used to explain in detail all the classes and functions in the project.</p>
+<div class="section" id="extractfeaturescoordinates-py">
+<h2>extractFeaturesCoordinates.py<a class="headerlink" href="#extractfeaturescoordinates-py" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-extractFeaturesCoordinates"></span><p>This class is used to detect faces in a picture.</p>
+<dl class="function">
+<dt id="extractFeaturesCoordinates.extractFeatures">
+<code class="descclassname">extractFeaturesCoordinates.</code><code class="descname">extractFeatures</code><span class="sig-paren">(</span><em>basepath_train</em>, <em>show_images</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extractFeaturesCoordinates.html#extractFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extractFeaturesCoordinates.extractFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function detect landmarks for a dataset of faces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>basepath_train</strong> &#8211; (str) Training data storage path.</li>
+<li><strong>show_images</strong> &#8211; (bool) Whether to display the results after detecting the face.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">It return a tuple (res, facedb) where res is to check is all was ok (False if there are more than one face on the image) and facedb contains the images, together with coordinates points of landmarks for each image</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-FaceLand">
+<span id="faceland-py"></span><h2>FaceLand.py<a class="headerlink" href="#module-FaceLand" title="Permalink to this headline">¶</a></h2>
+<p>This file contains the fonction to find frontal human faces in an image and estimate their pose.  The pose takes the form of 68 landmarks.  These are
+points on the face such as the corners of the mouth, on the eyes, and so forth.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can get the shape_predictor_68_face_landmarks.dat file from:
+<a class="reference external" href="http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2">http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2</a></p>
+</div>
+</div>
+<div class="section" id="getlatentspace-py">
+<h2>getLatentSpace.py<a class="headerlink" href="#getlatentspace-py" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-getLatentSpace"></span><p>This module is responsible for creating the latent space using traing and testing data.</p>
+<dl class="function">
+<dt id="getLatentSpace.genLatentSpace">
+<code class="descclassname">getLatentSpace.</code><code class="descname">genLatentSpace</code><span class="sig-paren">(</span><em>iters</em>, <em>latentDim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/getLatentSpace.html#genLatentSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#getLatentSpace.genLatentSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generate Latent Space (by Gaussian Process Latent Variable Model) using training data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>iters</strong> &#8211; Number of iterations to optimise the datas</li>
+<li><strong>latentDim</strong> &#8211; Dimension of the latent space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Mymodel (Gaussian Process Latent Variable Model):  the model generated by user&#8217;s data.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>dataSamples (vector of numpyarray): the samples data in type vector.</p>
+<p>labelSamples (vector of numpyarray): the classification label of the samples data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getLatentSpace.genLatentSpaceTest">
+<code class="descclassname">getLatentSpace.</code><code class="descname">genLatentSpaceTest</code><span class="sig-paren">(</span><em>dataAsListTest</em>, <em>labelsAsListTest</em>, <em>iters</em>, <em>latentDim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/getLatentSpace.html#genLatentSpaceTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#getLatentSpace.genLatentSpaceTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generate Latent Space (by Gaussian Process Latent Variable Model) using training data and testing data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataAsListTest</strong> &#8211; The samples data (data-type: map&lt;class, list of dict[(&#8216;points&#8217;,array of couple),(&#8216;dist&#8217;,array of couple)]&gt;</li>
+<li><strong>labelsAsListTest</strong> &#8211; The classification label (list of int)</li>
+<li><strong>iters</strong> &#8211; Number of iterations to optimise the datas</li>
+<li><strong>latentDim</strong> &#8211; dimension of the latent space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Mymodel (Gaussian Process Latent Variable Model):  the model generated by user&#8217;s data.</p>
+<p>dataSamples (vector of numpyarray): the samples data in type vector.</p>
+<p>labelSamples (vector of numpyarray): the classification label of the samples data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-knn">
+<span id="knn-py"></span><h2>knn.py<a class="headerlink" href="#module-knn" title="Permalink to this headline">¶</a></h2>
+<p>kNN: k Nearest Neighbors</p>
+<p>Input:</p>
+<ol class="arabic simple">
+<li>newInput: vector to compare to existing dataset (1xN)</li>
+<li>dataSet:  size m data set of known vectors (NxM)</li>
+<li>labels:      data set labels (1xM vector)</li>
+<li>k:           number of neighbors to use for comparison</li>
+</ol>
+<p>Output:</p>
+<ol class="arabic simple">
+<li>the most popular class label</li>
+</ol>
+<dl class="data">
+<dt id="knn.Emotion_dict">
+<code class="descclassname">knn.</code><code class="descname">Emotion_dict</code><em class="property"> = {1: 'joie', 2: 'degout', 3: 'tristesse', 4: 'colere', 5: 'surprise'}</em><a class="headerlink" href="#knn.Emotion_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of emotions: In this project we use 5 base emotions.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="knn.Matrix_dict">
+<code class="descclassname">knn.</code><code class="descname">Matrix_dict</code><em class="property"> = {'surprise': 0, 'tristesse': 0, 'colere': 0, 'degout': 0, 'joie': 0}</em><a class="headerlink" href="#knn.Matrix_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of result matrix: This dictionary is used for recording the results of each prediction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="knn.createDataSet">
+<code class="descclassname">knn.</code><code class="descname">createDataSet</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#createDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.createDataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare data sets for predict</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataList</strong> &#8211; The coordinates of all expressions in latent space.</li>
+<li><strong>lableList</strong> &#8211; The classification labels of all expressions.</li>
+<li><strong>lenTest</strong> &#8211; the number of the test data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>groupData: Array list of the training data&#8217;s coordinates</p>
+<p>groupTest: Array list of the testing data&#8217;s coordinates</p>
+<p>labels: list of classification labels</p>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="knn.kNNClassify">
+<code class="descclassname">knn.</code><code class="descname">kNNClassify</code><span class="sig-paren">(</span><em>newInput</em>, <em>dataSet</em>, <em>labels</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#kNNClassify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.kNNClassify" title="Permalink to this definition">¶</a></dt>
+<dd><p>kNN method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>newInput</strong> &#8211; Data being classified</li>
+<li><strong>dataSet</strong> &#8211; Training data</li>
+<li><strong>labels</strong> &#8211; The classification labels</li>
+<li><strong>k</strong> &#8211; nNumber of neighbors to use for comparison</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>maxIndex: The closest expression index.</p>
+<p>classCount: The matrix of the result.</p>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="knn.predictMatrix">
+<code class="descclassname">knn.</code><code class="descname">predictMatrix</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em>, <em>K</em>, <em>labelsAsListTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#predictMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.predictMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify emotions using kNN then generate the predict matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataList</strong> &#8211; The coordinates of all expressions in latent space.</li>
+<li><strong>lableList</strong> &#8211; The classification labels of all expressions.</li>
+<li><strong>lenTest</strong> &#8211; the number of the test data</li>
+<li><strong>K</strong> &#8211; Number of neighbors to use for comparison</li>
+<li><strong>labelsAsListTest</strong> &#8211; the real classification labels of testing datas.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Print the Matrix of results.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="process-dataset-py">
+<h2>process_dataset.py<a class="headerlink" href="#process-dataset-py" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-process_dataset"></span><p>This module is responsible for harvesting CK database for images of emotions. It gets a neutral face and a emotion face for each subject.
+Based on Paul van Gent&#8217;s code from blog post: <a class="reference external" href="http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/">http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/</a></p>
+</div>
+<div class="section" id="runme-py">
+<h2>RunMe.py<a class="headerlink" href="#runme-py" title="Permalink to this headline">¶</a></h2>
+<p>The main function of the project.</p>
+</div>
+<div class="section" id="setfeaturesdata-py">
+<h2>setFeaturesData.py<a class="headerlink" href="#setfeaturesdata-py" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-setFeaturesData"></span><p>This module is responsible for saving features data to the text database.</p>
+<dl class="function">
+<dt id="setFeaturesData.getListsFromImages">
+<code class="descclassname">setFeaturesData.</code><code class="descname">getListsFromImages</code><span class="sig-paren">(</span><em>basepath_train</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/setFeaturesData.html#getListsFromImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#setFeaturesData.getListsFromImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs the function of face detection. And the results will be saved to two list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>basepath_train</strong> &#8211; (str)Training data storage path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>dataAsList ({list}&lt;type &#8216;int&#8217;&gt;):  A map contains all the detected feature values.</p>
+<p>labelsAsList list(int): A list contains all the classification labels.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-adjust">
+<span id="adjust-py"></span><h2>adjust.py<a class="headerlink" href="#module-adjust" title="Permalink to this headline">¶</a></h2>
+<p>This module is responsible for adjusting the face in the image by the location of 2 eyes.
+Copyright (c) Philipp Wagner. All rights reserved.</p>
+<dl class="function">
+<dt id="adjust.CropFace">
+<code class="descclassname">adjust.</code><code class="descname">CropFace</code><span class="sig-paren">(</span><em>image</em>, <em>eye_left=(0</em>, <em>0)</em>, <em>eye_right=(0</em>, <em>0)</em>, <em>offset_pct=(0.2</em>, <em>0.2)</em>, <em>dest_sz=(70</em>, <em>70)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#CropFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.CropFace" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> &#8211; Original image</li>
+<li><strong>eye_left</strong> &#8211; Position of the left eye</li>
+<li><strong>eye_right</strong> &#8211; Position of the right eye</li>
+<li><strong>offset_pct</strong> &#8211; used for calculating offsets in original image</li>
+<li><strong>dest_sz</strong> &#8211; size of cropped image</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cropped image</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="adjust.Distance">
+<code class="descclassname">adjust.</code><code class="descname">Distance</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.Distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculate the distance between 2 points.
+:param p1: point 1
+:param p2: point 2
+:return: distance</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="adjust.ScaleRotateTranslate">
+<code class="descclassname">adjust.</code><code class="descname">ScaleRotateTranslate</code><span class="sig-paren">(</span><em>image</em>, <em>angle</em>, <em>center=None</em>, <em>new_center=None</em>, <em>scale=None</em>, <em>resample=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#ScaleRotateTranslate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.ScaleRotateTranslate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function adjusts the angle of the face.
+:param image: Image to be processed
+:param angle: The inclination angle of the face
+:param center: The center of the angle transformation
+:param new_center: New center
+:param scale: Scale factor
+:param resample: Image.BICUBIC
+:return: Transformed image</p>
+</dd></dl>
+
+</div>
+<div class="section" id="preprocessing-py">
+<h2>preProcessing.py<a class="headerlink" href="#preprocessing-py" title="Permalink to this headline">¶</a></h2>
+<p>This module is responsible for preprocessing of images. The purpose is to improve the recognition rate of expression.</p>
+</div>
+<div class="section" id="module-utilText">
+<span id="utiltext-py"></span><h2>utilText.py<a class="headerlink" href="#module-utilText" title="Permalink to this headline">¶</a></h2>
+<p>This module is used to implement IO operations as a tool.</p>
+<p>It is called after the face detection,the purpose is to save the detected feature values in a document for later use.
+The operations for reading the detected feature values from the text are also implemented in this class.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<dl class="last docutils">
+<dt>Feature values and classification labels are stored in a different path.</dt>
+<dd><ul class="first last simple">
+<li>Feature values are stored in <code class="docutils literal"><span class="pre">FeaturesData/dataValues.txt</span></code>.</li>
+<li>classification labels are stored in <code class="docutils literal"><span class="pre">FeaturesData/labels.txt</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<dl class="data">
+<dt id="utilText.feature_values_path">
+<code class="descclassname">utilText.</code><code class="descname">feature_values_path</code><em class="property"> = 'FeaturesData/dataValues.txt'</em><a class="headerlink" href="#utilText.feature_values_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: The path of the text which stored feature values.
+Can be modified according to the requirements</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="utilText.label_path">
+<code class="descclassname">utilText.</code><code class="descname">label_path</code><em class="property"> = 'FeaturesData/labels.txt'</em><a class="headerlink" href="#utilText.label_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: The path of the text which stored labels of classification.
+Can be modified according to the requirements</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilText.SaveFeatures">
+<code class="descclassname">utilText.</code><code class="descname">SaveFeatures</code><span class="sig-paren">(</span><em>dataAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#SaveFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.SaveFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function store detected feature values into text file .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataAsList</strong> &#8211; ({list}&lt;type &#8216;list&#8217;&gt;) All the detected feature values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilText.ReadFeatures">
+<code class="descclassname">utilText.</code><code class="descname">ReadFeatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#ReadFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.ReadFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function read detected feature values from the text file .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map(int, list) contains all the detected feature values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilText.SaveLabels">
+<code class="descclassname">utilText.</code><code class="descname">SaveLabels</code><span class="sig-paren">(</span><em>dataLabelsAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#SaveLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.SaveLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function store classification labels into text file .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataLabelsAsList</strong> &#8211; ({list}&lt;type &#8216;int&#8217;&gt;) All the classification labels.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utilText.ReadLabels">
+<code class="descclassname">utilText.</code><code class="descname">ReadLabels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#ReadLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.ReadLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function read classification labels from the text file .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list(int) contains all the classification labels.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-webcam">
+<span id="webcam-py"></span><h2>webcam.py<a class="headerlink" href="#module-webcam" title="Permalink to this headline">¶</a></h2>
+<p>This module loads emotion recognition model from a file,
+shows a webcam image, recognizes face and it&#8217;s emotion and draw emotion on the image.</p>
+<dl class="function">
+<dt id="webcam.show_webcam_and_run">
+<code class="descclassname">webcam.</code><code class="descname">show_webcam_and_run</code><span class="sig-paren">(</span><em>window_size=None</em>, <em>window_name='webcam'</em>, <em>update_time=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/webcam.html#show_webcam_and_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#webcam.show_webcam_and_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.
+:param window_size: Size of webcam image window.
+:param window_name: Name of webcam image window.
+:param update_time: Image update time interval.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Documentation for the Code</a><ul>
+<li><a class="reference internal" href="#extractfeaturescoordinates-py">extractFeaturesCoordinates.py</a></li>
+<li><a class="reference internal" href="#module-FaceLand">FaceLand.py</a></li>
+<li><a class="reference internal" href="#getlatentspace-py">getLatentSpace.py</a></li>
+<li><a class="reference internal" href="#module-knn">knn.py</a></li>
+<li><a class="reference internal" href="#process-dataset-py">process_dataset.py</a></li>
+<li><a class="reference internal" href="#runme-py">RunMe.py</a></li>
+<li><a class="reference internal" href="#setfeaturesdata-py">setFeaturesData.py</a></li>
+<li><a class="reference internal" href="#module-adjust">adjust.py</a></li>
+<li><a class="reference internal" href="#preprocessing-py">preProcessing.py</a></li>
+<li><a class="reference internal" href="#module-utilText">utilText.py</a></li>
+<li><a class="reference internal" href="#module-webcam">webcam.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Code.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="UpdateLog.html"
+                        title="next chapter">Update Log</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Documentation of Code.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="UpdateLog.html" title="Update Log"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Code.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Reconnaissance d&#39;émotion 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Qiuye DONG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
