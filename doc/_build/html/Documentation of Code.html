@@ -79,6 +79,27 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="extractFeaturesCoordinates.getFeatures">
+<code class="descclassname">extractFeaturesCoordinates.</code><code class="descname">getFeatures</code><span class="sig-paren">(</span><em>basepath_train</em>, <em>show_images</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extractFeaturesCoordinates.html#getFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extractFeaturesCoordinates.getFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function detect landmarks for a dataset of faces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>basepath_train</strong> &#8211; (str) Training data storage path.</li>
+<li><strong>show_images</strong> &#8211; (bool) Whether to display the results after detecting the face.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">It return a tuple (res, facedb) where res is to check is all was ok (False if there are more than one face on the image) and facedb contains the images, together with coordinates points of landmarks for each image</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-FaceLand">
 <span id="faceland-py"></span><h2>FaceLand.py<a class="headerlink" href="#module-FaceLand" title="Permalink to this headline">¶</a></h2>
@@ -143,8 +164,8 @@ points on the face such as the corners of the mouth, on the eyes, and so forth.<
 </dd></dl>
 
 </div>
-<div class="section" id="module-knn">
-<span id="knn-py"></span><h2>knn.py<a class="headerlink" href="#module-knn" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-classify.knn">
+<span id="knn-py"></span><h2>knn.py<a class="headerlink" href="#module-classify.knn" title="Permalink to this headline">¶</a></h2>
 <p>kNN: k Nearest Neighbors</p>
 <p>Input:</p>
 <ol class="arabic simple">
@@ -158,20 +179,20 @@ points on the face such as the corners of the mouth, on the eyes, and so forth.<
 <li>the most popular class label</li>
 </ol>
 <dl class="data">
-<dt id="knn.Emotion_dict">
-<code class="descclassname">knn.</code><code class="descname">Emotion_dict</code><em class="property"> = {1: 'joie', 2: 'degout', 3: 'tristesse', 4: 'colere', 5: 'surprise'}</em><a class="headerlink" href="#knn.Emotion_dict" title="Permalink to this definition">¶</a></dt>
+<dt id="classify.knn.Emotion_dict">
+<code class="descclassname">classify.knn.</code><code class="descname">Emotion_dict</code><em class="property"> = {1: 'joie', 2: 'degout', 3: 'tristesse', 4: 'colere', 5: 'surprise'}</em><a class="headerlink" href="#classify.knn.Emotion_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of emotions: In this project we use 5 base emotions.</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="knn.Matrix_dict">
-<code class="descclassname">knn.</code><code class="descname">Matrix_dict</code><em class="property"> = {'surprise': 0, 'tristesse': 0, 'colere': 0, 'degout': 0, 'joie': 0}</em><a class="headerlink" href="#knn.Matrix_dict" title="Permalink to this definition">¶</a></dt>
+<dt id="classify.knn.Matrix_dict">
+<code class="descclassname">classify.knn.</code><code class="descname">Matrix_dict</code><em class="property"> = {'surprise': 0, 'tristesse': 0, 'colere': 0, 'degout': 0, 'joie': 0}</em><a class="headerlink" href="#classify.knn.Matrix_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of result matrix: This dictionary is used for recording the results of each prediction.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="knn.createDataSet">
-<code class="descclassname">knn.</code><code class="descname">createDataSet</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#createDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.createDataSet" title="Permalink to this definition">¶</a></dt>
+<dt id="classify.knn.createDataSet">
+<code class="descclassname">classify.knn.</code><code class="descname">createDataSet</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classify/knn.html#createDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classify.knn.createDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepare data sets for predict</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -195,8 +216,8 @@ points on the face such as the corners of the mouth, on the eyes, and so forth.<
 </dd></dl>
 
 <dl class="function">
-<dt id="knn.kNNClassify">
-<code class="descclassname">knn.</code><code class="descname">kNNClassify</code><span class="sig-paren">(</span><em>newInput</em>, <em>dataSet</em>, <em>labels</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#kNNClassify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.kNNClassify" title="Permalink to this definition">¶</a></dt>
+<dt id="classify.knn.kNNClassify">
+<code class="descclassname">classify.knn.</code><code class="descname">kNNClassify</code><span class="sig-paren">(</span><em>newInput</em>, <em>dataSet</em>, <em>labels</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classify/knn.html#kNNClassify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classify.knn.kNNClassify" title="Permalink to this definition">¶</a></dt>
 <dd><p>kNN method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -220,8 +241,32 @@ points on the face such as the corners of the mouth, on the eyes, and so forth.<
 </dd></dl>
 
 <dl class="function">
-<dt id="knn.predictMatrix">
-<code class="descclassname">knn.</code><code class="descname">predictMatrix</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em>, <em>K</em>, <em>labelsAsListTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn.html#predictMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#knn.predictMatrix" title="Permalink to this definition">¶</a></dt>
+<dt id="classify.knn.predictImage">
+<code class="descclassname">classify.knn.</code><code class="descname">predictImage</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em>, <em>K</em>, <em>labelsAsListTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classify/knn.html#predictImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classify.knn.predictImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify emotions using kNN then generate the predict emotion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataList</strong> &#8211; The coordinates of all expressions in latent space.</li>
+<li><strong>lableList</strong> &#8211; The classification labels of all expressions.</li>
+<li><strong>lenTest</strong> &#8211; the number of the test data</li>
+<li><strong>K</strong> &#8211; Number of neighbors to use for comparison</li>
+<li><strong>labelsAsListTest</strong> &#8211; the real classification labels of testing datas.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Print the Matrix of results.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="classify.knn.predictMatrix">
+<code class="descclassname">classify.knn.</code><code class="descname">predictMatrix</code><span class="sig-paren">(</span><em>dataList</em>, <em>lableList</em>, <em>lenTest</em>, <em>K</em>, <em>labelsAsListTest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classify/knn.html#predictMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#classify.knn.predictMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classify emotions using kNN then generate the predict matrix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -246,7 +291,7 @@ points on the face such as the corners of the mouth, on the eyes, and so forth.<
 </div>
 <div class="section" id="process-dataset-py">
 <h2>process_dataset.py<a class="headerlink" href="#process-dataset-py" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-process_dataset"></span><p>This module is responsible for harvesting CK database for images of emotions. It gets a neutral face and a emotion face for each subject.
+<span class="target" id="module-dataSet.process_dataset"></span><p>This module is responsible for harvesting CK database for images of emotions. It gets a neutral face and a emotion face for each subject.
 Based on Paul van Gent&#8217;s code from blog post: <a class="reference external" href="http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/">http://www.paulvangent.com/2016/04/01/emotion-recognition-with-python-opencv-and-a-face-dataset/</a></p>
 </div>
 <div class="section" id="runme-py">
@@ -255,10 +300,10 @@ Based on Paul van Gent&#8217;s code from blog post: <a class="reference external
 </div>
 <div class="section" id="setfeaturesdata-py">
 <h2>setFeaturesData.py<a class="headerlink" href="#setfeaturesdata-py" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-setFeaturesData"></span><p>This module is responsible for saving features data to the text database.</p>
+<span class="target" id="module-dataSet.setFeaturesData"></span><p>This module is responsible for saving features data to the text database.</p>
 <dl class="function">
-<dt id="setFeaturesData.getListsFromImages">
-<code class="descclassname">setFeaturesData.</code><code class="descname">getListsFromImages</code><span class="sig-paren">(</span><em>basepath_train</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/setFeaturesData.html#getListsFromImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#setFeaturesData.getListsFromImages" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.setFeaturesData.getListsFromImages">
+<code class="descclassname">dataSet.setFeaturesData.</code><code class="descname">getListsFromImages</code><span class="sig-paren">(</span><em>basepath_train</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dataSet/setFeaturesData.html#getListsFromImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataSet.setFeaturesData.getListsFromImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function performs the function of face detection. And the results will be saved to two list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -275,13 +320,13 @@ Based on Paul van Gent&#8217;s code from blog post: <a class="reference external
 </dd></dl>
 
 </div>
-<div class="section" id="module-adjust">
-<span id="adjust-py"></span><h2>adjust.py<a class="headerlink" href="#module-adjust" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-preProcess.adjust">
+<span id="adjust-py"></span><h2>adjust.py<a class="headerlink" href="#module-preProcess.adjust" title="Permalink to this headline">¶</a></h2>
 <p>This module is responsible for adjusting the face in the image by the location of 2 eyes.
 Copyright (c) Philipp Wagner. All rights reserved.</p>
 <dl class="function">
-<dt id="adjust.CropFace">
-<code class="descclassname">adjust.</code><code class="descname">CropFace</code><span class="sig-paren">(</span><em>image</em>, <em>eye_left=(0</em>, <em>0)</em>, <em>eye_right=(0</em>, <em>0)</em>, <em>offset_pct=(0.2</em>, <em>0.2)</em>, <em>dest_sz=(70</em>, <em>70)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#CropFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.CropFace" title="Permalink to this definition">¶</a></dt>
+<dt id="preProcess.adjust.CropFace">
+<code class="descclassname">preProcess.adjust.</code><code class="descname">CropFace</code><span class="sig-paren">(</span><em>image</em>, <em>eye_left=(0</em>, <em>0)</em>, <em>eye_right=(0</em>, <em>0)</em>, <em>offset_pct=(0.2</em>, <em>0.2)</em>, <em>dest_sz=(70</em>, <em>70)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preProcess/adjust.html#CropFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#preProcess.adjust.CropFace" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -303,8 +348,8 @@ Copyright (c) Philipp Wagner. All rights reserved.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="adjust.Distance">
-<code class="descclassname">adjust.</code><code class="descname">Distance</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.Distance" title="Permalink to this definition">¶</a></dt>
+<dt id="preProcess.adjust.Distance">
+<code class="descclassname">preProcess.adjust.</code><code class="descname">Distance</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preProcess/adjust.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#preProcess.adjust.Distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculate the distance between 2 points.
 :param p1: point 1
 :param p2: point 2
@@ -312,8 +357,8 @@ Copyright (c) Philipp Wagner. All rights reserved.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="adjust.ScaleRotateTranslate">
-<code class="descclassname">adjust.</code><code class="descname">ScaleRotateTranslate</code><span class="sig-paren">(</span><em>image</em>, <em>angle</em>, <em>center=None</em>, <em>new_center=None</em>, <em>scale=None</em>, <em>resample=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adjust.html#ScaleRotateTranslate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adjust.ScaleRotateTranslate" title="Permalink to this definition">¶</a></dt>
+<dt id="preProcess.adjust.ScaleRotateTranslate">
+<code class="descclassname">preProcess.adjust.</code><code class="descname">ScaleRotateTranslate</code><span class="sig-paren">(</span><em>image</em>, <em>angle</em>, <em>center=None</em>, <em>new_center=None</em>, <em>scale=None</em>, <em>resample=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preProcess/adjust.html#ScaleRotateTranslate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#preProcess.adjust.ScaleRotateTranslate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function adjusts the angle of the face.
 :param image: Image to be processed
 :param angle: The inclination angle of the face
@@ -329,8 +374,8 @@ Copyright (c) Philipp Wagner. All rights reserved.</p>
 <h2>preProcessing.py<a class="headerlink" href="#preprocessing-py" title="Permalink to this headline">¶</a></h2>
 <p>This module is responsible for preprocessing of images. The purpose is to improve the recognition rate of expression.</p>
 </div>
-<div class="section" id="module-utilText">
-<span id="utiltext-py"></span><h2>utilText.py<a class="headerlink" href="#module-utilText" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataSet.utilText">
+<span id="utiltext-py"></span><h2>utilText.py<a class="headerlink" href="#module-dataSet.utilText" title="Permalink to this headline">¶</a></h2>
 <p>This module is used to implement IO operations as a tool.</p>
 <p>It is called after the face detection,the purpose is to save the detected feature values in a document for later use.
 The operations for reading the detected feature values from the text are also implemented in this class.</p>
@@ -346,22 +391,22 @@ The operations for reading the detected feature values from the text are also im
 </dl>
 </div>
 <dl class="data">
-<dt id="utilText.feature_values_path">
-<code class="descclassname">utilText.</code><code class="descname">feature_values_path</code><em class="property"> = 'FeaturesData/dataValues.txt'</em><a class="headerlink" href="#utilText.feature_values_path" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.utilText.feature_values_path">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">feature_values_path</code><em class="property"> = '/Users/Alex/Documents/PRD/IHM_EmotionDetection/ProjetSI_FinalVersion/Ressources/Algorithmes/src/FeaturesData/dataValues.txt'</em><a class="headerlink" href="#dataSet.utilText.feature_values_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>str: The path of the text which stored feature values.
 Can be modified according to the requirements</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="utilText.label_path">
-<code class="descclassname">utilText.</code><code class="descname">label_path</code><em class="property"> = 'FeaturesData/labels.txt'</em><a class="headerlink" href="#utilText.label_path" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.utilText.label_path">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">label_path</code><em class="property"> = '/Users/Alex/Documents/PRD/IHM_EmotionDetection/ProjetSI_FinalVersion/Ressources/Algorithmes/src/FeaturesData/labels.txt'</em><a class="headerlink" href="#dataSet.utilText.label_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>str: The path of the text which stored labels of classification.
 Can be modified according to the requirements</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="utilText.SaveFeatures">
-<code class="descclassname">utilText.</code><code class="descname">SaveFeatures</code><span class="sig-paren">(</span><em>dataAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#SaveFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.SaveFeatures" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.utilText.SaveFeatures">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">SaveFeatures</code><span class="sig-paren">(</span><em>dataAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dataSet/utilText.html#SaveFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataSet.utilText.SaveFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function store detected feature values into text file .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -374,8 +419,8 @@ Can be modified according to the requirements</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="utilText.ReadFeatures">
-<code class="descclassname">utilText.</code><code class="descname">ReadFeatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#ReadFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.ReadFeatures" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.utilText.ReadFeatures">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">ReadFeatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dataSet/utilText.html#ReadFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataSet.utilText.ReadFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function read detected feature values from the text file .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -388,22 +433,15 @@ Can be modified according to the requirements</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="utilText.SaveLabels">
-<code class="descclassname">utilText.</code><code class="descname">SaveLabels</code><span class="sig-paren">(</span><em>dataLabelsAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#SaveLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.SaveLabels" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function store classification labels into text file .</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataLabelsAsList</strong> &#8211; ({list}&lt;type &#8216;int&#8217;&gt;) All the classification labels.</td>
-</tr>
-</tbody>
-</table>
+<dt id="dataSet.utilText.SaveLabels">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">SaveLabels</code><span class="sig-paren">(</span><em>dataLabelsAsList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dataSet/utilText.html#SaveLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataSet.utilText.SaveLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function store classification labels into text file.</p>
+<p>:param dataLabelsAsList:({list}&lt;type &#8216;int&#8217;&gt;) All the classification labels.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="utilText.ReadLabels">
-<code class="descclassname">utilText.</code><code class="descname">ReadLabels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilText.html#ReadLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utilText.ReadLabels" title="Permalink to this definition">¶</a></dt>
+<dt id="dataSet.utilText.ReadLabels">
+<code class="descclassname">dataSet.utilText.</code><code class="descname">ReadLabels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dataSet/utilText.html#ReadLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataSet.utilText.ReadLabels" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function read classification labels from the text file .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -413,20 +451,6 @@ Can be modified according to the requirements</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-webcam">
-<span id="webcam-py"></span><h2>webcam.py<a class="headerlink" href="#module-webcam" title="Permalink to this headline">¶</a></h2>
-<p>This module loads emotion recognition model from a file,
-shows a webcam image, recognizes face and it&#8217;s emotion and draw emotion on the image.</p>
-<dl class="function">
-<dt id="webcam.show_webcam_and_run">
-<code class="descclassname">webcam.</code><code class="descname">show_webcam_and_run</code><span class="sig-paren">(</span><em>window_size=None</em>, <em>window_name='webcam'</em>, <em>update_time=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/webcam.html#show_webcam_and_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#webcam.show_webcam_and_run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.
-:param window_size: Size of webcam image window.
-:param window_name: Name of webcam image window.
-:param update_time: Image update time interval.</p>
 </dd></dl>
 
 </div>
@@ -444,14 +468,13 @@ shows a webcam image, recognizes face and it&#8217;s emotion and draw emotion on
 <li><a class="reference internal" href="#extractfeaturescoordinates-py">extractFeaturesCoordinates.py</a></li>
 <li><a class="reference internal" href="#module-FaceLand">FaceLand.py</a></li>
 <li><a class="reference internal" href="#getlatentspace-py">getLatentSpace.py</a></li>
-<li><a class="reference internal" href="#module-knn">knn.py</a></li>
+<li><a class="reference internal" href="#module-classify.knn">knn.py</a></li>
 <li><a class="reference internal" href="#process-dataset-py">process_dataset.py</a></li>
 <li><a class="reference internal" href="#runme-py">RunMe.py</a></li>
 <li><a class="reference internal" href="#setfeaturesdata-py">setFeaturesData.py</a></li>
-<li><a class="reference internal" href="#module-adjust">adjust.py</a></li>
+<li><a class="reference internal" href="#module-preProcess.adjust">adjust.py</a></li>
 <li><a class="reference internal" href="#preprocessing-py">preProcessing.py</a></li>
-<li><a class="reference internal" href="#module-utilText">utilText.py</a></li>
-<li><a class="reference internal" href="#module-webcam">webcam.py</a></li>
+<li><a class="reference internal" href="#module-dataSet.utilText">utilText.py</a></li>
 </ul>
 </li>
 </ul>

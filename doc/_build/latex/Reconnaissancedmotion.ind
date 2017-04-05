@@ -1,0 +1,64 @@
+\begin{theindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter C
+  \item classify.knn (module), \hyperpage{6}
+  \item createDataSet() (in module classify.knn), \hyperpage{7}
+  \item CropFace() (in module preProcess.adjust), \hyperpage{8}
+
+  \indexspace
+  \bigletter D
+  \item dataSet.process\_dataset (module), \hyperpage{8}
+  \item dataSet.setFeaturesData (module), \hyperpage{8}
+  \item dataSet.utilText (module), \hyperpage{9}
+  \item Distance() (in module preProcess.adjust), \hyperpage{8}
+
+  \indexspace
+  \bigletter E
+  \item Emotion\_dict (in module classify.knn), \hyperpage{6}
+  \item extractFeatures() (in module extractFeaturesCoordinates), \hyperpage{5}
+  \item extractFeaturesCoordinates (module), \hyperpage{5}
+
+  \indexspace
+  \bigletter F
+  \item FaceLand (module), \hyperpage{5}
+  \item feature\_values\_path (in module dataSet.utilText), \hyperpage{9}
+
+  \indexspace
+  \bigletter G
+  \item genLatentSpace() (in module getLatentSpace), \hyperpage{6}
+  \item genLatentSpaceTest() (in module getLatentSpace), \hyperpage{6}
+  \item getFeatures() (in module extractFeaturesCoordinates), \hyperpage{5}
+  \item getLatentSpace (module), \hyperpage{6}
+  \item getListsFromImages() (in module dataSet.setFeaturesData), \hyperpage{8}
+
+  \indexspace
+  \bigletter K
+  \item kNNClassify() (in module classify.knn), \hyperpage{7}
+
+  \indexspace
+  \bigletter L
+  \item label\_path (in module dataSet.utilText), \hyperpage{9}
+
+  \indexspace
+  \bigletter M
+  \item Matrix\_dict (in module classify.knn), \hyperpage{6}
+
+  \indexspace
+  \bigletter P
+  \item predictImage() (in module classify.knn), \hyperpage{7}
+  \item predictMatrix() (in module classify.knn), \hyperpage{7}
+  \item preProcess.adjust (module), \hyperpage{8}
+
+  \indexspace
+  \bigletter R
+  \item ReadFeatures() (in module dataSet.utilText), \hyperpage{9}
+  \item ReadLabels() (in module dataSet.utilText), \hyperpage{9}
+
+  \indexspace
+  \bigletter S
+  \item SaveFeatures() (in module dataSet.utilText), \hyperpage{9}
+  \item SaveLabels() (in module dataSet.utilText), \hyperpage{9}
+  \item ScaleRotateTranslate() (in module preProcess.adjust), \hyperpage{8}
+
+\end{theindex}

@@ -53,7 +53,7 @@
 
 <span class="kn">from</span> <span class="nn">FaceLand</span> <span class="k">import</span> <span class="n">FaceLandmarks</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">io</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">io</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">color</span><span class="p">,</span><span class="n">img_as_ubyte</span>
 
 <div class="viewcode-block" id="extractFeatures"><a class="viewcode-back" href="../Documentation of Code.html#extractFeaturesCoordinates.extractFeatures">[docs]</a><span class="k">def</span> <span class="nf">extractFeatures</span><span class="p">(</span><span class="n">basepath_train</span><span class="p">,</span> <span class="n">show_images</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This function detect landmarks for a dataset of faces.</span>
@@ -74,17 +74,46 @@
         <span class="n">facedb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">pathn</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pathn</span><span class="p">):</span>
-                <span class="c1"># create detector object with a landmarks detector model</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="n">pathn</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
-                <span class="n">img</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">pathn</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
-                <span class="c1"># the second parameter is for drawing landmarks on the screen</span>
-                <span class="n">features</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">features</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
-                    <span class="n">facedb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">==</span><span class="s2">&quot;.DS_Store&quot;</span><span class="p">:</span>
+                    <span class="k">pass</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">res</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="c1"># create detector object with a landmarks detector model</span>
+                    <span class="nb">print</span> <span class="p">(</span><span class="n">pathn</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">pathn</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+                    <span class="c1"># the second parameter is for drawing landmarks on the screen</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">img_as_ubyte</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                    <span class="n">features</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">features</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+                        <span class="n">facedb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">res</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
     
+    <span class="k">return</span> <span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">facedb</span><span class="p">)</span></div>
+
+
+<span class="c1"># The function for IHMEmotionDetection</span>
+<div class="viewcode-block" id="getFeatures"><a class="viewcode-back" href="../Documentation of Code.html#extractFeaturesCoordinates.getFeatures">[docs]</a><span class="k">def</span> <span class="nf">getFeatures</span><span class="p">(</span><span class="n">basepath_train</span><span class="p">,</span> <span class="n">show_images</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function detect landmarks for a dataset of faces.</span>
+
+<span class="sd">    :param basepath_train: (str) Training data storage path.</span>
+<span class="sd">    :param show_images: (bool) Whether to display the results after detecting the face.</span>
+<span class="sd">    :return:         It return a tuple (res, facedb) where res is to check is all was ok (False if there are more than one face on the image) and facedb contains the images, together with coordinates points of landmarks for each image</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">facedb</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">facedb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># initialization of the face landmarks</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="n">FaceLandmarks</span><span class="p">(</span><span class="s1">&#39;/Users/Alex/Documents/PRD/IHM_EmotionDetection/ProjetSI_FinalVersion/Ressources/Algorithmes/src/shape_predictor_68_face_landmarks.dat&#39;</span><span class="p">,</span> <span class="n">show_images</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">basepath_train</span><span class="p">)</span>
+    <span class="c1"># the second parameter is for drawing landmarks on the screen</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">features</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">facedb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">facedb</span><span class="p">)</span></div>
 </pre></div>
 

@@ -52,7 +52,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">GPy</span>
-<span class="kn">import</span> <span class="nn">utilText</span>
+<span class="kn">import</span> <span class="nn">dataSet.utilText</span> <span class="k">as</span> <span class="nn">utilText</span>
 
 
 <div class="viewcode-block" id="genLatentSpaceTest"><a class="viewcode-back" href="../Documentation of Code.html#getLatentSpace.genLatentSpaceTest">[docs]</a><span class="k">def</span> <span class="nf">genLatentSpaceTest</span><span class="p">(</span><span class="n">dataAsListTest</span><span class="p">,</span> <span class="n">labelsAsListTest</span><span class="p">,</span> <span class="n">iters</span><span class="p">,</span> <span class="n">latentDim</span><span class="p">):</span>
@@ -126,8 +126,8 @@
     <span class="c1"># print labelSamples, labelSamples.shape</span>
 
     <span class="c1"># ker3 = GPy.kern.RBF(2, 0.1*0.1, .2)</span>
-    <span class="n">Mymodel</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">gplvm</span><span class="o">.</span><span class="n">GPLVM</span><span class="p">(</span><span class="n">dataSamples</span><span class="p">,</span> <span class="n">latentDim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">sde_RBF</span><span class="p">(</span><span class="n">latentDim</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span><span class="o">+</span><span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">sde_White</span><span class="p">(</span><span class="mf">0.000001</span><span class="p">))</span>
-    <span class="c1">#Mymodel = GPy.models.gplvm.GPLVM(dataSamples, latentDim,kernel=GPy.kern.Matern32(latentDim)+GPy.kern.Bias(latentDim))</span>
+    <span class="c1">#Mymodel = GPy.models.gplvm.GPLVM(dataSamples, latentDim, kernel=GPy.kern.sde_RBF(latentDim,0.01)+GPy.kern.sde_White(0.000001))</span>
+    <span class="n">Mymodel</span> <span class="o">=</span> <span class="n">GPy</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">gplvm</span><span class="o">.</span><span class="n">GPLVM</span><span class="p">(</span><span class="n">dataSamples</span><span class="p">,</span> <span class="n">latentDim</span><span class="p">,</span><span class="n">kernel</span><span class="o">=</span><span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">Matern32</span><span class="p">(</span><span class="n">latentDim</span><span class="p">)</span><span class="o">+</span><span class="n">GPy</span><span class="o">.</span><span class="n">kern</span><span class="o">.</span><span class="n">Bias</span><span class="p">(</span><span class="n">latentDim</span><span class="p">))</span>
 
     <span class="c1"># print &#39;*** Init ***&#39;</span>
     <span class="c1"># print Mymodel</span>

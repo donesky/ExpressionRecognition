@@ -24,13 +24,13 @@ getLatentSpace.py
 knn.py
 -------------
 
-.. automodule:: knn
+.. automodule:: classify.knn
    :members:
 
 process_dataset.py
 -------------
 
-.. automodule:: process_dataset
+.. automodule:: dataSet.process_dataset
    :members:
 
 RunMe.py
@@ -43,30 +43,24 @@ The main function of the project.
 setFeaturesData.py
 -------------
 
-.. automodule:: setFeaturesData
+.. automodule:: dataSet.setFeaturesData
    :members:
 
 adjust.py
 -------------
 
-.. automodule:: adjust
+.. automodule:: preProcess.adjust
    :members:
 
 preProcessing.py
 -------------
 This module is responsible for preprocessing of images. The purpose is to improve the recognition rate of expression.
 
-.. automodule:: preProcessing
+.. automodule:: preProcess.preProcessing
    :members:
 
 utilText.py
 -------------
 
-.. automodule:: utilText
+.. automodule:: dataSet.utilText
    :members: feature_values_path, label_path, SaveFeatures, ReadFeatures, SaveLabels, ReadLabels
-
-webcam.py
--------------
-
-.. automodule:: webcam
-   :members:

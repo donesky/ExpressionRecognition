@@ -1,0 +1,28 @@
+\indexentry{extractFeaturesCoordinates (module)|hyperpage}{5}
+\indexentry{extractFeatures() (in module extractFeaturesCoordinates)|hyperpage}{5}
+\indexentry{getFeatures() (in module extractFeaturesCoordinates)|hyperpage}{5}
+\indexentry{FaceLand (module)|hyperpage}{5}
+\indexentry{getLatentSpace (module)|hyperpage}{6}
+\indexentry{genLatentSpace() (in module getLatentSpace)|hyperpage}{6}
+\indexentry{genLatentSpaceTest() (in module getLatentSpace)|hyperpage}{6}
+\indexentry{classify.knn (module)|hyperpage}{6}
+\indexentry{Emotion\_dict (in module classify.knn)|hyperpage}{6}
+\indexentry{Matrix\_dict (in module classify.knn)|hyperpage}{6}
+\indexentry{createDataSet() (in module classify.knn)|hyperpage}{7}
+\indexentry{kNNClassify() (in module classify.knn)|hyperpage}{7}
+\indexentry{predictImage() (in module classify.knn)|hyperpage}{7}
+\indexentry{predictMatrix() (in module classify.knn)|hyperpage}{7}
+\indexentry{dataSet.process\_dataset (module)|hyperpage}{8}
+\indexentry{dataSet.setFeaturesData (module)|hyperpage}{8}
+\indexentry{getListsFromImages() (in module dataSet.setFeaturesData)|hyperpage}{8}
+\indexentry{preProcess.adjust (module)|hyperpage}{8}
+\indexentry{CropFace() (in module preProcess.adjust)|hyperpage}{8}
+\indexentry{Distance() (in module preProcess.adjust)|hyperpage}{8}
+\indexentry{ScaleRotateTranslate() (in module preProcess.adjust)|hyperpage}{8}
+\indexentry{dataSet.utilText (module)|hyperpage}{9}
+\indexentry{feature\_values\_path (in module dataSet.utilText)|hyperpage}{9}
+\indexentry{label\_path (in module dataSet.utilText)|hyperpage}{9}
+\indexentry{SaveFeatures() (in module dataSet.utilText)|hyperpage}{9}
+\indexentry{ReadFeatures() (in module dataSet.utilText)|hyperpage}{9}
+\indexentry{SaveLabels() (in module dataSet.utilText)|hyperpage}{9}
+\indexentry{ReadLabels() (in module dataSet.utilText)|hyperpage}{9}
